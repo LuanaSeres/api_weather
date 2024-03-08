@@ -1,0 +1,163 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin: 0;
+}
+
+header {
+  background-color: #4169E1;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 30px;
+}
+
+header input {
+  width: 650px;
+  height: 10px;
+  border: #fff;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 8px;
+  width: 60%;
+  margin-bottom: 10px;
+}
+
+.login {
+  text-decoration: none;
+  background: #00008B;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.tempohoje {
+  display: flex;
+  margin: 30px;
+  background: #B0C4DE;
+  border-radius: 20px;
+  height: 300px;
+  padding: 30px;
+}
+
+.infos {
+  display: flex;
+  flex-wrap: wrap;
+  background: #fff;
+  width: 400px;
+  border-radius: 20px;
+  font-size: small;
+}
+
+.pressao {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.elementos {
+  
+}
+
+.pressao img{
+  align-items: center;
+}
+
+.precipitacao {
+  display: flex;
+}
+
+.umidade {
+  display: flex;
+}
+
+.clima {
+  display: flex;
+}
+
+.infos img {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+
+.login {
+  text-decoration: none;
+  background: #00008B;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+
+main {
+  padding: 20px;
+}
+
+input,
+select {
+  padding: 8px;
+  width: 60%;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 8px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.weather-info {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #4CAF50;
+  color: #fff;
+} */

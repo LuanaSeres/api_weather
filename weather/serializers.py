@@ -6,7 +6,7 @@ class WeatherSerializer(serializers.Serializer):
     date = serializers.DateTimeField()
     city = serializers.CharField(required=False)
     atmosphericPressure = serializers.FloatField(required=False)
-    humidity = serializers.CharField(required=False)
+    humidity = serializers.FloatField(required=False)
     weather = serializers.CharField(required=False)
 
     def create(self, validated_data):

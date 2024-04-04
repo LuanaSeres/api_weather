@@ -5,13 +5,24 @@ from django.http import HttpResponse
 from .forms import WeatherForm
 from .repositories import WeatherRepository
 from .serializers import WeatherSerializer
+from .exceptions import WeatherException
 
 class WeatherView(View):
     def get(self, request):
         repository = WeatherRepository(collectionName='weathers')
-        weather = repository.getAll() 
-        serializer = WeatherSerializer(weather, many=True) 
-        return render(request, "home.html", {"weathers": serializer.data}) 
+        try:
+            weathers = list(repository.getAll())
+            serializer = WeatherSerializer(data=weathers, many=True)
+            if (serializer.is_valid()):
+                modelWeather = serializer.save()
+                print(serializer.data)
+            else:
+                print(serializer.errors)
+            objectReturn = {"weathers":modelWeather}
+        except WeatherException as e:
+            objectReturn = {"error": e.message}
+
+        return render(request, "home.html", objectReturn) 
 
 class WeatherGenerate(View):
     def get(self, request):

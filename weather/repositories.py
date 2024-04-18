@@ -1,6 +1,7 @@
 from django.conf import settings
 import pymongo
 from .exceptions import WeatherException
+from bson import ObjectId
 
 class WeatherRepository:
     collection = ''
@@ -27,8 +28,22 @@ class WeatherRepository:
         return document
     
     def getAll(self):
-        documents = self.getCollection().find({})
+        documents = []
+        for document in self.getCollection().find({}):
+            id = document.pop('_id')
+            document['id'] = str(id)
+            documents.append(document)
         return documents
+    
+    def getByID(self, id):
+        document = self.getCollection().find_one({"_id": ObjectId(id)})
+        id = document.pop('_id')
+        document['id'] = str(id)
+        return document
+    
+
+    def update(self, document, id):
+        self.getCollection().update_one({"_id": ObjectId(id)}, document)
     
     def getByAttribute(self, attribute, value):
         documents = self.getCollection().find({attribute: value})

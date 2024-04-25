@@ -22,14 +22,19 @@
     </a>
 
     <ul class="nav nav-pills">
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a href="{% url 'Weather Insert' %}" class="nav-link">Insert</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'Weather Generate' %}" class="nav-link">Generate</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'Weather Reset' %}" class="nav-link">Reset</a>
+        </li>
+      {% endif %}
       <li class="nav-item">
-        <a href="{% url 'Weather Insert' %}" class="nav-link">Insert</a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'Weather Generate' %}" class="nav-link">Generate</a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'Weather Reset' %}" class="nav-link">Reset</a>
+        <a href="{% url 'Weather Login' %}" class="nav-link">Login</a>
       </li>
     </ul>
   </header>

@@ -93,3 +93,39 @@ class WeatherEdit(View):
                 print(serializer.errors)
         else:
             print(weatherForm.errors)
+
+        return redirect('Weather View')
+
+
+
+
+class WeatherDelete(View):
+    def get(self, request, id):
+        repository = WeatherRepository(collectionName='weathers')
+        repository.deleteByID(id)
+
+        return redirect('Weather View')
+    
+
+class WeatherFilter(View):
+    def post(self, request):
+        data = request.POST.dict()
+        data.pop('csrfmiddlewaretoken')
+
+        repository = WeatherRepository(collectionName='weathers')
+        try:
+            weathers = list(repository.get(data))
+            serializer = WeatherSerializer(data=weathers, many=True)
+            if (serializer.is_valid()):
+                # print('Data: ')
+                # print(serializer.data)
+                modelWeather = serializer.save()
+                objectReturn = {"weathers":modelWeather}
+            else:
+                # print('Error: ')
+                # print(serializer.errors)
+                objectReturn = {"error":serializer.errors}
+        except WeatherException as e:
+            objectReturn = {"error":e.message}
+  
+        return render(request, "home.html", objectReturn)

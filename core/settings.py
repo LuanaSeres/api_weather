@@ -1,4 +1,8 @@
 from pathlib import Path
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x!!ghv9+2hud4=l42p)p+xs!n@a^23-wlzc@_t*=vt!0_*+*5c'
+SECRET_KEY = 'PALMEIRAS NÃO TEM MUNDIAL'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -26,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'weather',
 ]
 
@@ -45,7 +50,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-           BASE_DIR / 'templates'
+            BASE_DIR / 'templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -72,8 +77,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #     }
 # }
 
+# MONGO_CONNECTION_STRING = "mongodb+srv://ads_user:<password>@clusterads.xmrbktn.mongodb.net/?retryWrites=true&w=majority&appName=ClusterADS"
 MONGO_CONNECTION_STRING = 'mongodb://10.109.2.63:443/'
-MONGO_DATABASE_NAME = 'weather_luana'
+MONGO_DATABASE_NAME = 'weather_andresouza'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

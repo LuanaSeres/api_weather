@@ -1,18 +1,16 @@
+from typing import Any, Mapping
 from django import forms
+from django.forms.renderers import BaseRenderer
+from django.forms.utils import ErrorList
+from .models import WeatherEntity
 
 class WeatherForm(forms.Form):
-    temperature = forms.FloatField(label='Temperatura')
-    date = forms.DateTimeField(label='Data')
-    city = forms.CharField(label='Cidade', required=False)
-    atmosphericPressure = forms.CharField(label='Pressão Atmosférica', required=False)
-    humidity = forms.CharField(label='Umidade', required=False)
-    weather = forms.CharField(label='Clima', required=False)
+    temperature = forms.FloatField()
+    date = forms.DateTimeField()
+    city = forms.CharField(max_length=255)
+    atmosphericPressure = forms.FloatField(required=False)
+    humidity = forms.FloatField(required=False)
+    weather = forms.CharField(max_length=255, required=False)
 
-class UserForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=100)
-    email = forms.EmailField(label='Email')
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-
-class LoginForm(forms.Form):
-    username = forms.CharField(label='Username')
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    # def __init__(self, *args, **kwargs):
+    #     self.fields['temperature'].label = 'Temperatura'

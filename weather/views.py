@@ -1,7 +1,13 @@
+from typing import Any
 from datetime import datetime
 from random import randrange
+from django.http import HttpRequest
+from django.http.response import HttpResponse as HttpResponse
 from django.views import View
 from django.shortcuts import render, redirect
+
+from user.authentication import *
+
 from .models import WeatherEntity
 from .repositories import WeatherRepository
 from .serializers import WeatherSerializer
@@ -9,6 +15,21 @@ from .forms import WeatherForm
 from .exceptions import WeatherException
 
 class WeatherView(View):
+
+    authenticate = False
+    user = None
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any):
+        # deverá vir de request
+        token = request.COOKIES.get('jwt')
+
+        error_code, _ = verifyToken(token)
+        if error_code == 0:
+            user = getAuthenticatedUser(token)
+            self.authenticate = True
+        
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request):
         repository = WeatherRepository(collectionName='weathers')
         try:
@@ -25,11 +46,22 @@ class WeatherView(View):
                 objectReturn = {"error":serializer.errors}
         except WeatherException as e:
             objectReturn = {"error":e.message}
+
+        if not self.authenticate:
+            objectReturn["errorAuth"] = "Usuário não autenticado"
+
+        # print(objectReturn)
+
+        response = render(request, "home.html", objectReturn)
+        if self.user is not None:
+            newToken = refreshToken(self.user)
+            response.set_cookie('jwt', newToken)
   
-        return render(request, "home.html", objectReturn)
+        return response
     
 
 class WeatherGenerate(View):
+
     def get(self, request):
         repository = WeatherRepository(collectionName='weathers')
         weather = WeatherEntity(
@@ -46,6 +78,7 @@ class WeatherGenerate(View):
         return redirect('Weather View')
     
 class WeatherReset(View):
+
     def get(self, request): 
         repository = WeatherRepository(collectionName='weathers')
         repository.deleteAll()
@@ -53,10 +86,11 @@ class WeatherReset(View):
         return redirect('Weather View')
     
 class WeatherInsert(View):
+
     def get(self, request):
         weatherForm = WeatherForm()
 
-        return render(request, "insert.html", {"form":weatherForm})
+        return render(request, "form.html", {"form":weatherForm})
     
     def post(self, request):
         weatherForm = WeatherForm(request.POST)
@@ -74,12 +108,13 @@ class WeatherInsert(View):
     
 
 class WeatherEdit(View):
+
     def get(self, request, id):
         repository = WeatherRepository(collectionName='weathers')
         weather = repository.getByID(id)
         weatherForm = WeatherForm(initial=weather)
 
-        return render(request, "edit.html", {"form":weatherForm, "id":id})
+        return render(request, "form_edit.html", {"form":weatherForm, "id":id})
     
     def post(self, request, id):
         weatherForm = WeatherForm(request.POST)
@@ -100,6 +135,7 @@ class WeatherEdit(View):
 
 
 class WeatherDelete(View):
+    
     def get(self, request, id):
         repository = WeatherRepository(collectionName='weathers')
         repository.deleteByID(id)
@@ -117,13 +153,9 @@ class WeatherFilter(View):
             weathers = list(repository.get(data))
             serializer = WeatherSerializer(data=weathers, many=True)
             if (serializer.is_valid()):
-                # print('Data: ')
-                # print(serializer.data)
                 modelWeather = serializer.save()
                 objectReturn = {"weathers":modelWeather}
             else:
-                # print('Error: ')
-                # print(serializer.errors)
                 objectReturn = {"error":serializer.errors}
         except WeatherException as e:
             objectReturn = {"error":e.message}

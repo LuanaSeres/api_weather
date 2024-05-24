@@ -3,7 +3,9 @@ from bson import ObjectId
 
 class WeatherEntity:
 
-    def __init__(self, temperature, date, city='', atmosphericPressure=0, humidity=0, weather='', id='') -> None:
+    def __init__(self, temperature, date,
+                 city='', atmosphericPressure=0,
+                 humidity=0, weather='', id='') -> None:
         self.id = id
         self.temperature = temperature
         self.city = city
@@ -20,9 +22,4 @@ class WeatherEntity:
             return object.__getattribute__(self, __name).strftime("%d/%m/%Y %H:%M:%S")
         else:
             return object.__getattribute__(self, __name)
-  
-  
-  
-  
-  
-  
+

@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # MONGO_CONNECTION_STRING = "mongodb+srv://ads_user:<password>@clusterads.xmrbktn.mongodb.net/?retryWrites=true&w=majority&appName=ClusterADS"
 MONGO_CONNECTION_STRING = 'mongodb://10.109.2.63:443/'
-MONGO_DATABASE_NAME = 'weather_andresouza'
+MONGO_DATABASE_NAME = 'weather_luana'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

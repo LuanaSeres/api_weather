@@ -5,6 +5,7 @@ from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.views import View
 from django.shortcuts import render, redirect
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from user.authentication import *
 
@@ -16,17 +17,14 @@ from .exceptions import WeatherException
 
 class WeatherView(View):
 
-    authenticate = False
-    user = None
+    authentication_classes = [JWTAuthentication]
 
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any):
-        # deverá vir de request
-        token = request.COOKIES.get('jwt')
-
-        error_code, _ = verifyToken(token)
-        if error_code == 0:
-            user = getAuthenticatedUser(token)
-            self.authenticate = True
+        try:
+            user, _ = self.authentication_classes[0].authenticate(request=request)
+            request.user = user
+        except Exception as e:
+            pass
         
         return super().dispatch(request, *args, **kwargs)
 
@@ -47,17 +45,10 @@ class WeatherView(View):
         except WeatherException as e:
             objectReturn = {"error":e.message}
 
-        if not self.authenticate:
-            objectReturn["errorAuth"] = "Usuário não autenticado"
+        if not request.user:
+            objectReturn["errorAuth"] = "Usuário Não Autenticado"
 
-        # print(objectReturn)
-
-        response = render(request, "home.html", objectReturn)
-        if self.user is not None:
-            newToken = refreshToken(self.user)
-            response.set_cookie('jwt', newToken)
-  
-        return response
+        return render(request, "home.html", objectReturn)
     
 
 class WeatherGenerate(View):
@@ -130,8 +121,6 @@ class WeatherEdit(View):
             print(weatherForm.errors)
 
         return redirect('Weather View')
-
-
 
 
 class WeatherDelete(View):

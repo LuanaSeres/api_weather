@@ -11,6 +11,11 @@ urlpatterns = [
     path('generate', WeatherGenerate.as_view(), name='Weather Generate'),
     path('reset', WeatherReset.as_view(), name='Weather Reset'),
 
-    path('login', UserLogin.as_view(), name='Login'),
-    path('logout', UserLogout.as_view(), name='Logout')
+    path('login/', LoginView.as_view(), name='Weather Login'),
+    path('user/generate', UserGenerate.as_view(), name='User Generate'),
+    path('user/edit/<id>/', UserEdit.as_view(), name='User Edit'),
+    path('user/delete/<id>/', UserDelete.as_view(), name='User Delete'),
+    path('user/list/', UserList.as_view(), name='User List'),
+    path('token', UserTokenizer.as_view(), name='User'),
+    path('logout/', UserLogout.as_view(), name='Logout'),
 ]

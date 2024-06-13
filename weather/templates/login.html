@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+        <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{% url 'User Generate' %}">Register here</a>.</p>
+{% endblock content %}

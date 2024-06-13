@@ -7,7 +7,7 @@ from .authentication import *
 from weather.forms import UserForm, LoginForm
 from django.utils.deprecation import MiddlewareMixin
 
-class UserLogin(View):
+class UserTokenizer(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -39,7 +39,7 @@ class UserGenerate(View):
             )
             repository = UserRepository(collectionName='users')
             repository.insert(user)
-            return redirect('User List')
+            return redirect('Weather View')
         
         return render(request, "user_generate.html", {'form': form})
 
@@ -103,7 +103,7 @@ class LoginView(View):
 
 class UserLogout(View):
     def get(self, request):
-        response = redirect('Weather View')
+        response = redirect('Weather View')  
         response.delete_cookie('jwt_token')
         return response
     

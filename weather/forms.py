@@ -2,7 +2,7 @@ from django import forms
 
 class WeatherForm(forms.Form):
     temperature = forms.FloatField()
-    date = forms.DateTimeField()
+    date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S'])
     city = forms.CharField(max_length=255)
     atmosphericPressure = forms.FloatField(required=False)
     humidity = forms.FloatField(required=False)

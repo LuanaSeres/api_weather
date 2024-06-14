@@ -6,6 +6,7 @@ from django.http.response import HttpResponse as HttpResponse
 from django.views import View
 from django.shortcuts import render, redirect
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.contrib import messages
 
 from user.authentication import *
 
@@ -80,22 +81,33 @@ class WeatherInsert(View):
 
     def get(self, request):
         weatherForm = WeatherForm()
-
-        return render(request, "form.html", {"form":weatherForm})
+        return render(request, "form.html", {"form": weatherForm})
     
     def post(self, request):
         weatherForm = WeatherForm(request.POST)
         if weatherForm.is_valid():
-            serializer = WeatherSerializer(data=weatherForm.data)
-            if (serializer.is_valid()):
-                repository = WeatherRepository(collectionName='weathers')
-                repository.insert(serializer.data)
+            repository = WeatherRepository(collectionName='weathers')
+            weather_data = {
+                'temperature': weatherForm.cleaned_data['temperature'],
+                'date': weatherForm.cleaned_data['date'].strftime('%Y-%m-%d %H:%M:%S'),
+                'city': weatherForm.cleaned_data['city'],
+                'atmosphericPressure': weatherForm.cleaned_data['atmosphericPressure'],
+                'humidity': weatherForm.cleaned_data['humidity'],
+                'weather': weatherForm.cleaned_data['weather'],
+            }
+            serializer = WeatherSerializer(data=weather_data)
+            if serializer.is_valid():
+                repository.insert(serializer.validated_data)
+                messages.success(request, "Weather data inserted successfully!")
+                return redirect('Weather View')
             else:
-                print(serializer.errors)
-        else:
-            print(weatherForm.errors)
+                errors = serializer.errors
+                messages.error(request, f"Validation errors: {errors}")
+                return render(request, "form.html", {"form": weatherForm})
 
-        return redirect('Weather View')
+        errors = weatherForm.errors
+        messages.error(request, f"Form errors: {errors}")
+        return render(request, "form.html", {"form": weatherForm})
     
 
 class WeatherEdit(View):

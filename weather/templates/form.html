@@ -12,8 +12,11 @@
 
 <h1>Insert Climate Data</h1>
 
+<p>Insert the top in the Y/m/d pattern</p>
+
 <div class="d-flex justify-content-start flex-wrap">
 
+    {% if request.user %}
     <form action="{% url 'Weather Insert' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="col-md-12 p-2">
@@ -31,6 +34,9 @@
             </div>
         </div>
     </form>
+    {% else %}
+        <p>Para gerar um novo card de clima, faça login primeiro.</p>
+    {% endif %}
 
 </div>
 {% endblock content %}

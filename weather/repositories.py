@@ -10,11 +10,12 @@ class WeatherRepository:
         self.collection = collectionName
 
     def getConnection(self):
+        client = pymongo.MongoClient(getattr(settings, "MONGO_CONNECTION_STRING"))
         try:
             client = pymongo.MongoClient(getattr(settings, "MONGO_CONNECTION_STRING"))
         except:
             raise WeatherException("Error connecting to database")
-        
+
         connection = client[getattr(settings, "MONGO_DATABASE_NAME")]
         return connection
     
